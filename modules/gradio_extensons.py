@@ -117,7 +117,11 @@ def Image_custom_preprocess(self, x):
     if self.tool == "sketch" and self.source in ["upload", "webcam"]:
         mask_im = None
         if mask is not None:
-            mask_im = processing_utils.decode_base64_to_image(mask)
+            try:
+                mask_im = processing_utils.decode_base64_to_image(mask)
+            except Exception as e:
+                print(f"[reForge] WARNING: Failed to decode mask image: {e}")
+                mask_im = None
         return {
             "image": self._format_image(im),
             "mask": self._format_image(mask_im)
